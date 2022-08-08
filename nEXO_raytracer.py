@@ -3,6 +3,8 @@ Simulates a number of Rn222 decays in the LXe cell
 
 author: Nick Sanders
 
+date: 8-8-2022
+
 To run:
 python nEXO_raytracer <n_decays> <file_id>
 '''
@@ -24,7 +26,7 @@ real_dim = [real_r, real_h]
 PMT_dim = 0.5 * .0254   #Half side length of the PMT
 
 #PTFE Properties
-p_ref = 0.72  #Probability photon reflects off wall of chamber
+p_ref = 0.72  #Probability photon reflects off wall of chamber (in readme)
 
 #LXe Properties
 attenuation = 0.364  #Attenuation length in LXe
@@ -36,13 +38,16 @@ n_LXe = 1.69
 
 #Misc.
 p_det = 0.3  #Probability of photon creating photoelecron
+'''
+We use the decay of Rn222 as a test case. This can be adjusted to any desired decay just by scaling by the energy
+'''
 E_decay = 5590  #keV
-QperE = 72 * 0.99
+QperE = 72 * 0.99  #quanta/keV * fraction in photons for alpha decay
 Qperdecay = E_decay * QperE
 
 def randLocation(dim):
     '''
-    Picks a random location for a decay to occur
+    Picks a random location for a decay to occur (cylindrical coordinates)
     '''
     location = [dim[0]*np.sqrt(np.random.random()), 2*np.pi*np.random.random(), dim[1]*np.random.random()]
     return location
@@ -56,7 +61,7 @@ def randDirection():
 
 def nextSurface(x, y, dx, dy, radius):
     '''
-    Finds the time when the ray next intersects the cylinder's surface
+    Finds the time when the ray next intersects the cylinder's rectangular surface (side of the cell)
     Geometry worked out here: https://www.cl.cam.ac.uk/teaching/1999/AGraphHCI/SMAG/node2.html
     '''
     a = dx**2 + dy**2
@@ -90,7 +95,7 @@ def nextLG(z, dz, LXe_height):
 
 def updatePos(x, y, z, dx, dy, dz, travelled, t):
     '''
-    Updates the current position of the photon
+    Updates the current position of the photon and travelled distance
     '''
     xdist = dx * t
     ydist = dy * t
@@ -135,7 +140,6 @@ def hitEdge(x, y, dx, dy, dz, PMT_dim):
     '''
     Checks if photon hits PMT, then reflects if not
     '''
-    #Update to reflect randomly
     if abs(x) < PMT_dim and abs(y) < PMT_dim:  #ray has hit the PMT
         return dx, dy, dz, 1
     dx, dy, dz = reflectEdge(dz)
@@ -145,9 +149,9 @@ def refract(dx, dy, dz, in_L):
     '''
     Refracts photon through the liquid/gas boundary
     '''
-    if in_L:
+    if in_L:  #moving from liquid to gas
         n1, n2 = n_LXe, 1
-    else:
+    else:  #moving from gas to liquid
         n1, n2 = 1, n_LXe
     prefactor = (n1 / n2) * np.sqrt(dx**2 + dy**2)
     if prefactor >= 1:  #total internal reflection
@@ -159,6 +163,7 @@ def refract(dx, dy, dz, in_L):
         dx = prefactor * np.cos(atan)
         dy = prefactor * np.sin(atan)
         dz = np.cos(np.arcsin(prefactor))
+        #sign checks due to range of arctan
         if np.sign(dx) != sx:
             dx = -dx
         if np.sign(dy) != sy:
@@ -169,7 +174,7 @@ def refract(dx, dy, dz, in_L):
     
 def rayTrace(location, direction, dimensions, PMT_dim, p_ref):
     '''
-    Traces the path of a signle photon.
+    Traces the path of a single photon.
     Returns 0 if not detected
     Returns 1 if detected by bottom PMT
     Returns 2 if detected by top PMT
@@ -183,10 +188,7 @@ def rayTrace(location, direction, dimensions, PMT_dim, p_ref):
     dx = np.cos(azimuth) * np.sin(polar)
     dy = np.sin(azimuth) * np.sin(polar)
     dz = np.cos(polar)
-    if z <= LXe_height:
-        in_L = True
-    else:
-        in_L = False
+    in_L = True  #Decays always happen in the liquid
     
     while True:
         t_cyl = nextSurface(x, y, dx, dy, radius)
@@ -226,9 +228,9 @@ def loop(N_decay, name):
     '''
     Simulates N_decay number of Rn222 decays in the LXe cell
     Writes results to 3 files in directory ./data
-    det1_counts{name}
-    det2_counts{name}
-    locs{name}
+    det1_counts{name}.npy  counts in bottom PMT
+    det2_counts{name}.npy  counts in top PMT
+    locs{name}.npy  cylindrical coordinates of the decay's location (r, phi, theta)
     '''
     decay_dim = [real_r, LXe_height]
     det1_counts = []
@@ -236,7 +238,6 @@ def loop(N_decay, name):
     locs = []
     for i in tqdm(range(N_decay)):  #for each decay event
         location = randLocation(decay_dim)
-        #N_photons = np.random.poisson(Qperdecay)  #Determine number of gammas produced by decay
         N_photons = int(Qperdecay)
         det1_count = 0
         det2_count = 0
