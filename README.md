@@ -6,6 +6,9 @@ The script requires you to define the number of decays you want to simulate as a
 
 The data files are written to the ```data/``` directory in the same directory as the script. Either create this directory or change the location of the saved files in the ```np.save``` statements at the end of the ```loop``` function.
 
+### Using SDF
+SDF is the shared computing resource at SLAC. It uses the job manager slurm. There is an example bash file that is used to schedule a job. To submit the job, execute ```sbatch <jobfile>```. For running many jobs, I'd recommend making a script that creates many of these job files and executes the ```sbatch``` command. The detailed slurm documentation is located here: https://slurm.schedmd.com/.
+
 ## Geometry
 Some operations need derivations, which are given here.
 
@@ -24,3 +27,6 @@ The rays refract through the liquid/gas boundary. So, we just work out the law o
 Here we always demand that the magnitude of the velocity vector be 1. Similar to before, ```arctan``` returns values along $[-\pi/2, \pi/2]$. If the incorrect angle is chosen, it will only result in a sign error. So, the code will flip the sign to the correct value (ie. refraction will never change the sign of a component.)
 
 It is possible that the argument to the ```arcsin``` in $dz$ is greater than 1. If this is the case, total internal reflection takes place, so the sign of $dz$ is simply flipped.
+
+## References
+PTFE Reflectivity in Liquid Xenon: https://doi.org/10.1063/1.3318681
