@@ -1,10 +1,10 @@
 #!/bin/bash
 #SBATCH --job-name=nEXORayTrace0
-#SBATCH --output=/sdf/home/s/sandersn/simulations/outputs/0.out
-#SBATCH --error=/sdf/home/s/sandersn/simulations/errors/0.err
+#SBATCH --output=/sdf/home/u/username/simulations/outputs/0.out
+#SBATCH --error=/sdf/home/u/username/simulations/errors/0.err
 #SBATCH --time=1:00:00
 #SBATCH --mem=1000
 #SBATCH --cpus-per-task=1
 #SBATCH --qos=normal
 #SBATCH --partition=shared
-python /sdf/home/s/sandersn/simulations/Real_Sim_v0.2_script_copy.py 100 0
+python /sdf/home/u/username/simulations/Real_Sim_v0.2_script_copy.py 100 0
