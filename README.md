@@ -30,3 +30,4 @@ It is possible that the argument to the ```arcsin``` in $dz$ is greater than 1. 
 
 ## References
 PTFE Reflectivity in Liquid Xenon: https://doi.org/10.1063/1.3318681
+Liquid Xenon Attenuation: https://arxiv.org/abs/physics/0307044#:~:text=The%20attenuation%20length%20and%20refractive,to%20be%201.69%20%2B%2D%200.02.
