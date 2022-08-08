@@ -10,10 +10,7 @@ python nEXO_raytracer <n_decays> <file_id>
 '''
 
 import numpy as np
-import matplotlib.pyplot as plt
-from tqdm import tqdm
 import sys
-plt.rcParams['figure.figsize'] = [10, 10]
 np.seterr(invalid='ignore')
 
 n_sim = int(sys.argv[1])
