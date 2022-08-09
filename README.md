@@ -1,13 +1,16 @@
 # nEXO-raytracer
 A ray tracer for the SLAC nEXO group's Liquid Xenon Cell
 
+## Description
+This code simulates Rn222 decays within the cylindrical liquid xenon cell. For every photon created by the decay, its path is traced, including reflections off the walls and refractions through the liquid/gas boundary. The photon continues until it hits a PMT, is absorbed by the walls, or is absorbed by the liquid xenon.
+
 ## Running
 The script requires you to define the number of decays you want to simulate as an additional argument when executing the script, as well as an ID to be used in naming the data file. The format for this execution is ```python nEXO_raytracer <n_decays> <file_id>```. For example, if ```n_decays=100``` and ```file_id=0```, then the counts for 100 decays in the bottom detector are written to ```det1_counts0.npy```.
 
 The data files are written to the ```data/``` directory in the same directory as the script. Either create this directory or change the location of the saved files in the ```np.save``` statements at the end of the ```loop``` function.
 
 ### Using SDF
-SDF is the shared computing resource at SLAC. It uses the job manager slurm. There is an example bash file that is used to schedule a job. To submit the job, execute ```sbatch <jobfile>```. For running many jobs, I'd recommend making a script that creates many of these job files and executes the ```sbatch``` command. The detailed slurm documentation is located here: https://slurm.schedmd.com/.
+SDF is the shared computing resource at SLAC. You can ssh into it using ```<username>@sdf-login.slac.stanford.edu```. There is also a graphical interface available [here](https://sdf.slac.stanford.edu/public/doc/#/). It uses the job manager slurm. There is an example bash file that is used to schedule a job. To submit the job, execute ```sbatch <jobfile>```. For running many jobs, I'd recommend making a script that creates many of these job files and executes the ```sbatch``` command. The detailed slurm documentation is located here: https://slurm.schedmd.com/.
 
 ## Geometry
 Some operations need derivations, which are given here.
