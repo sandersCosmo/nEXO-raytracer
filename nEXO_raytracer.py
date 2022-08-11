@@ -1,10 +1,7 @@
 '''
-Simulates a number of Rn222 decays in the LXe cell
-
+Simulates a number of arbitrary decays in the LXe cell
 author: Nick Sanders
-
-date: 8-8-2022
-
+date: 8-11-2022
 To run:
 python nEXO_raytracer <n_decays> <file_id>
 '''
@@ -23,10 +20,10 @@ real_dim = [real_r, real_h]
 PMT_dim = 0.5 * .0254   #Half side length of the PMT
 
 #PTFE Properties
-p_ref = 0.72  #Probability photon reflects off wall of chamber (in readme)
+p_ref = 0.97  #Reflection probability of PTFE in LXe (nEXO purity study)
 
 #LXe Properties
-attenuation = 0.364  #Attenuation length in LXe
+attenuation = 20.000  #mean free path of Xe scintillation light in LXe (nEXO purity study)
 density = 3057  #kg/m3
 LXe_mass = 8  #mass in kg in the cell
 LXe_vol = LXe_mass / density
@@ -35,12 +32,7 @@ n_LXe = 1.69
 
 #Misc.
 p_det = 0.3  #Probability of photon creating photoelecron
-'''
-We use the decay of Rn222 as a test case. This can be adjusted to any desired decay just by scaling by the energy
-'''
-E_decay = 5590  #keV
-QperE = 72 * 0.99  #quanta/keV * fraction in photons for alpha decay
-Qperdecay = E_decay * QperE
+Qperdecay = 80000  #Number of photons simulated per decay event
 
 def randLocation(dim):
     '''
@@ -72,9 +64,9 @@ def nextSurface(x, y, dx, dy, radius):
 
 def nextEdge(z, dz, height):
     '''
-    if dz > 0:
     Finds the time when the ray next intersects the top/bottom of the cell
     '''
+    if dz > 0:
         target = height
     else:
         target = 0
@@ -233,7 +225,7 @@ def loop(N_decay, name):
     det1_counts = []
     det2_counts = []
     locs = []
-    for i in tqdm(range(N_decay)):  #for each decay event
+    for i in range(N_decay):  #for each decay event, choose random location and trace all photons
         location = randLocation(decay_dim)
         N_photons = int(Qperdecay)
         det1_count = 0
