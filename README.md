@@ -32,6 +32,6 @@ Here we always demand that the magnitude of the velocity vector be 1. Similar to
 It is possible that the argument to the ```arcsin``` in $dz$ is greater than 1. If this is the case, total internal reflection takes place, so the sign of $dz$ is simply flipped.
 
 ## References
-PTFE Reflectivity in Liquid Xenon: https://doi.org/10.1063/1.3318681
+[nEXO Sensitivity Study](https://iopscience.iop.org/article/10.1088/1361-6471/ac3631)
 
-Liquid Xenon Attenuation: https://arxiv.org/abs/physics/0307044
+[LZ PTFE Study](https://arxiv.org/abs/1612.07965)
