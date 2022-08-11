@@ -20,10 +20,10 @@ real_dim = [real_r, real_h]
 PMT_dim = 0.5 * .0254   #Half side length of the PMT
 
 #PTFE Properties
-p_ref = 0.97  #Reflection probability of PTFE in LXe (nEXO purity study)
+p_ref = 0.97  #Reflection probability of PTFE in LXe (LZ Study)
 
 #LXe Properties
-attenuation = 20.000  #mean free path of Xe scintillation light in LXe (nEXO purity study)
+attenuation = 20.000  #mean free path of Xe scintillation light in LXe (nEXO sensitivty study)
 density = 3057  #kg/m3
 LXe_mass = 8  #mass in kg in the cell
 LXe_vol = LXe_mass / density
